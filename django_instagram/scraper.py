@@ -14,6 +14,13 @@ import logging
 SCRIPT_JSON_PREFIX = 18
 SCRIPT_JSON_DATA_INDEX = 21
 
+# Adding headers because instagram is sending requests to login without a session.
+HTTP_HEADERS = {
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36',
+    'accept': '*/*',
+    'accept-language': 'es-US,es-419;q=0.9,es;q=0.8,en;q=0.7',
+}
+
 
 def instagram_scrap_profile(username):
     """
@@ -23,7 +30,7 @@ def instagram_scrap_profile(username):
     """
     try:
         url = "https://www.instagram.com/{}/".format(username)
-        page = requests.get(url)
+        page = requests.get(url, headers=HTTP_HEADERS)
         # Raise error for 404 cause by a bad profile name
         page.raise_for_status()
         return html.fromstring(page.content)
